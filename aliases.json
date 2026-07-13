@@ -1,0 +1,7 @@
+{
+  "_comment": "Same person, different ESPN accounts. Anything the script can't safely guess goes here. It auto-merges identical names (and common nicknames like Nick/Nicholas, Dan/Daniel), so you only need this for cases it misses.",
+
+  "merge": [],
+
+  "rename": {}
+}

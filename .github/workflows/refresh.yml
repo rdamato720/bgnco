@@ -1,0 +1,41 @@
+# Refreshes league data every Tuesday morning during the season, then commits it.
+# Netlify sees the commit and redeploys automatically.
+#
+# Setup: in your GitHub repo, go to
+#   Settings > Secrets and variables > Actions > New repository secret
+# and add LEAGUE_ID with your league's numeric ID.
+
+name: Refresh league data
+
+on:
+  schedule:
+    - cron: "0 12 * * 2"   # Tuesdays, 12:00 UTC (8am ET)
+  workflow_dispatch:        # also lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Pull from ESPN
+        env:
+          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+        run: python fetch_data.py
+
+      - name: Commit if anything changed
+        run: |
+          git config user.name "league-bot"
+          git config user.email "league-bot@users.noreply.github.com"
+          git add site/data/league.json
+          git diff --staged --quiet || git commit -m "Refresh league data"
+          git push

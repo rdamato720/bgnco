@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>League Record Book</title>
+<meta name="description" content="Two decades of league history, all-time records, and weekly projections.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <div class="ident">
+      <div class="ident-mark" id="ident-mark">&mdash;</div>
+      <div>
+        <h1 id="league-name">Loading</h1>
+        <p class="ident-sub" id="league-sub">Reading the record book</p>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs" role="tablist">
+      <button class="tab is-active" data-view="week" role="tab">This Week</button>
+      <button class="tab" data-view="trophy" role="tab">Trophy Case</button>
+      <button class="tab" data-view="alltime" role="tab">All&#8209;Time</button>
+      <button class="tab" data-view="managers" role="tab">Managers</button>
+      <button class="tab" data-view="seasons" role="tab">Seasons</button>
+      <button class="tab" data-view="records" role="tab">Records</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <div class="loading" id="loading">Loading league data</div>
+
+  <!-- THIS WEEK -->
+  <section class="view" id="view-week" hidden>
+    <div class="view-head">
+      <div>
+        <p class="eyebrow" id="week-eyebrow">Week</p>
+        <h2 class="view-title" id="week-title">Matchups</h2>
+      </div>
+      <p class="view-note" id="week-note"></p>
+    </div>
+    <div class="week-grid">
+      <div class="matchups" id="matchups"></div>
+      <aside class="rail">
+        <div class="panel">
+          <h3 class="panel-title">Power Ratings</h3>
+          <p class="panel-hint">Elo, carried across every season since day one</p>
+          <ol class="power" id="power"></ol>
+        </div>
+        <div class="panel">
+          <h3 class="panel-title">Standings</h3>
+          <table class="mini" id="cur-standings"></table>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- TROPHY CASE -->
+  <section class="view" id="view-trophy" hidden>
+    <div class="view-head">
+      <div>
+        <p class="eyebrow">The hardware</p>
+        <h2 class="view-title">Trophy Case</h2>
+        <p class="view-note">Two trophies a year. The title, and the scoring crown for most regular season points.</p>
+      </div>
+      <div class="legend">
+        <span class="tk tk-gold">&#9670;</span> championship
+        <span class="tk tk-silver">&#9650;</span> scoring crown
+      </div>
+    </div>
+
+    <div class="cabinet" id="cabinet"></div>
+
+    <div class="view-head view-head--mid">
+      <div>
+        <p class="eyebrow">Year by year</p>
+        <h2 class="view-title">Who Took What</h2>
+        <p class="view-note">A <b class="brass">double</b> is winning the title and leading the league in scoring in the same year.</p>
+      </div>
+      <p class="view-note" id="double-count"></p>
+    </div>
+    <div class="table-scroll">
+      <table class="ledger" id="trophy-years"></table>
+    </div>
+  </section>
+
+  <!-- ALL TIME -->
+  <section class="view" id="view-alltime" hidden>
+    <div class="view-head">
+      <div>
+        <p class="eyebrow">Since <span id="since-year"></span></p>
+        <h2 class="view-title">The Franchise Ledger</h2>
+      </div>
+      <div class="toggle" id="active-toggle">
+        <button class="tgl is-on" data-scope="active">Active only</button>
+        <button class="tgl" data-scope="all">Everyone ever</button>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="ledger" id="ledger"></table>
+    </div>
+    <p class="fineprint fineprint--wide">
+      <b>LUCK</b> is actual wins minus expected wins. Expected wins compares your score each week against the
+      entire league, not just your opponent, which strips the schedule out entirely. Positive means the schedule
+      has been kind to you. Negative means you have been robbed, and now you can prove it.
+    </p>
+
+    <div class="view-head view-head--mid">
+      <div>
+        <p class="eyebrow">Two decades in one picture</p>
+        <h2 class="view-title">The Rating Arc</h2>
+        <p class="view-note">Season&#8209;end Elo. Click any name below to trace one franchise.</p>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div id="elo-chart"></div>
+      <div class="chart-key" id="chart-key"></div>
+    </div>
+
+    <div class="view-head view-head--mid">
+      <div>
+        <p class="eyebrow">Signature</p>
+        <h2 class="view-title">Head&#8209;to&#8209;Head, All&#8209;Time</h2>
+        <p class="view-note">Read across the row. Green means that manager owns the matchup.</p>
+      </div>
+      <div class="legend">
+        <span class="legend-swatch legend-rust"></span> dominated
+        <span class="legend-bar"></span>
+        <span class="legend-swatch legend-turf"></span> dominant
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="matrix" id="matrix"></table>
+    </div>
+
+    <div class="view-head view-head--mid">
+      <div>
+        <p class="eyebrow">The series that actually matter</p>
+        <h2 class="view-title">Rivalries</h2>
+      </div>
+    </div>
+    <div class="riv-grid" id="rivalries"></div>
+  </section>
+
+  <!-- MANAGERS -->
+  <section class="view" id="view-managers" hidden>
+    <div class="view-head">
+      <div>
+        <p class="eyebrow">Career files</p>
+        <h2 class="view-title">Managers</h2>
+      </div>
+    </div>
+    <div class="dupe-note" id="dupe-note" hidden></div>
+    <div class="mgr-layout">
+      <nav class="mgr-list" id="mgr-list"></nav>
+      <div class="mgr-detail" id="mgr-detail"></div>
+    </div>
+  </section>
+
+  <!-- SEASONS -->
+  <section class="view" id="view-seasons" hidden>
+    <div class="view-head">
+      <div>
+        <p class="eyebrow">Every champion</p>
+        <h2 class="view-title">The Title Ribbon</h2>
+      </div>
+    </div>
+    <div class="ribbon" id="ribbon"></div>
+    <div class="season-detail" id="season-detail"></div>
+  </section>
+
+  <!-- RECORDS -->
+  <section class="view" id="view-records" hidden>
+    <div class="view-head">
+      <div>
+        <p class="eyebrow">Etched in brass</p>
+        <h2 class="view-title">Record Book</h2>
+      </div>
+    </div>
+    <div class="records" id="records"></div>
+
+    <div class="view-head view-head--mid">
+      <div>
+        <p class="eyebrow">All&#8209;time single weeks</p>
+        <h2 class="view-title" id="tw-title">Biggest Weeks Ever</h2>
+      </div>
+      <div class="toggle" id="weeks-toggle">
+        <button class="tgl is-on" data-kind="best">Highest</button>
+        <button class="tgl" data-kind="worst">Most embarrassing</button>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="ledger" id="top-weeks"></table>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <p id="foot-line">&mdash;</p>
+  <p class="fineprint" id="foot-model"></p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

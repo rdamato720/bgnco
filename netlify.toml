@@ -1,0 +1,9 @@
+# Netlify publishes the site/ folder as-is. No build step, no framework.
+[build]
+  publish = "site"
+  command = ""
+
+[[headers]]
+  for = "/data/league.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
